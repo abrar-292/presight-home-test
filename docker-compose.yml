@@ -1,0 +1,25 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: presight-server
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DB_PATH=/app/data/presight.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: presight-client
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    restart: unless-stopped
